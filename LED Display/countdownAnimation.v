@@ -24,7 +24,7 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 	end
 	
 	
-	reg [2:0] oX,oY,oZ,color;
+	reg [3:0] oX,oY,oZ,color;
 	reg enable;
 
 	//helpers
@@ -36,9 +36,9 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 	always@(posedge clk) begin
 		if(!resetn) begin
 			CDADone <= 0;
-			oX <= 3'd2;
-			oY <= 3'd7;
-			oZ <= 3'd2;
+			oX <= 4'd2;
+			oY <= 4'd7;
+			oZ <= 4'd2;
 			color <= 0;
 			enable <= 0;
 			cntStay <= 0;
@@ -74,7 +74,8 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 				if(figure[(cntStay%15)/3][3*cntNum + (cntStay%15)%3]) begin
 					oZ <= 6 - ((cntStay%15)/3);
 					oX <= 2 + ((cntStay%15)%3);
-					oY <= cntlayer - 1;
+					if(cntlayer > 0)
+						oY <= cntlayer - 1;
 				
 				end
 				
