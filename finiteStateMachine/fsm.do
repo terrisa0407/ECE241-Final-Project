@@ -1,37 +1,111 @@
-# set the working dir, where all compiled verilog goes
-vlib work
 
-# compile all verilog modules in mux.v to working dir
-# could also have multiple verilog files
-vlog -novopt fsm.v
+module fsm(
+	input clk,
+	input LOAD,
+	input resetn, 
+	input sensor,
+	input pause, 
+	
+	input CDADone, // Countdown animation done
+	input rcm, // rainbow Color mode: 1(true)
+	
+	output reg Ped, // paused 
+	
+	output reg CDA, //Countdown Animation
+	output reg POS, // choosing position
+	output reg Color, // choosing colour
+	output reg off, // every light is off
+	output reg SA // Start Animation: Cubic animations
+	
+	//output reg [4:0] cs // current state (*For simulation)
+	);
+	
+	reg [4:0] cs,ns;
+	
+	//Assigning next Stage
+	always@(*) begin
+		case(cs)
+		
+			5'd0: ns = sensor ? 5'd1 : 5'd0; //notes: sensor needs to stay 1 once activated
+			5'd1: ns = CDADone ? 5'd2 : 5'd1;
+			5'd2: ns = LOAD ? 5'd3 : 5'd2; // notes: key value (pressed -> 1)
+			5'd3: ns = LOAD ? 5'd3 : 5'd4;
+			5'd4: begin
+				if(LOAD) begin
+					if(rcm) ns = 5'd8;
+					else ns = 5'd5;
+				end
+				else ns = 5'd4;
+			end
+			
+			5'd5: ns = LOAD ? 5'd5 : 5'd6;
+			5'd6: ns = pause ? 5'd7 : 5'd6; // notes: pressed -> true
+			5'd7: ns = pause ? 5'd7 : 5'd6;
+			
+			5'd8: ns = LOAD ? 5'd8 : 5'd9;
+			5'd9: ns = pause ? 5'd10 : 5'd9; 
+			5'd10: ns = pause ? 5'd10 : 5'd9;
+			default: ns = 5'd0;
+				
+		endcase
+	end
+	
+	//output in each stage
+	always@(*) begin
+	
+		off = 0;
+		CDA = 0;
+		POS = 0;
+		Color = 0;
+		SA = 0;
+		Ped = 0;
+		
+		case(cs)
+			5'd0: off = 1;
+			5'd1: 
+				CDA = 1;
+				
+			//Choosing pos
+			5'd2: 
+				POS = 1;
+			5'd3: 
+				POS = 1;
+			
+			//Choosing color 
+			5'd4: begin
+				Color = 1;
+			end
+			5'd5: begin
+				Color = 1;
+			end
+			
+			//animation (!rcm mode)
+			5'd6: 
+				SA = 1;
+			
+			5'd7: 
+				Ped = 1;
+			
+			//Choosing color (rcm mode)
+			5'd8: 
+				Color = 1;
+				
+			5'd9: begin
+				SA = 1;
+			end
+			
+			5'd10: Ped = 1;
+			
+		endcase
+	
+	end
 
-#load simulation using mux as the top level simulation module
-vsim fsm
+	always@(posedge clk) begin
+		if(!resetn)
+			cs <= 5'd0;
+		else 
+			cs <= ns;
+			
+	end
 
-#log all signals and add some signals to waveform window
-log {/*}
-# add wave {/*} would add all items in top level simulation module
-add wave {/*}
-
-# first test case
-#set input values using the force command, signal names need to be in {} brackets
-force {resetn} 0 0ps, 1 5ps
-force {LOAD} 0 0ps, 1 30ps, 0 40ps, 1 50ps, 0 60ps
-force {sensor} 0 0ps, 1 10ps
-force {pause} 0 0ps, 1 75ps, 0 90ps 
-force {CDADone} 0 0ps, 1 20ps
-force {clk} 1 0ps, 0 {2ps} -r 5ps
-force {rcm} 0
-#run simulation for a few 
-run 100ps
-
-//test for mode rcm=1 (rainbow color mode)
-force {resetn} 0 0ps, 1 10ps
-force {LOAD} 0 0ps, 1 30ps, 0 40ps, 1 50ps, 0 60ps
-force {sensor} 0 0ps, 1 10ps
-force {pause} 0 0ps, 1 75ps, 0 90ps 
-force {CDADone} 0 0ps, 1 20ps
-force {clk} 1 0ps, 0 {2ps} -r 5ps
-force {rcm} 1
-#run simulation for a few 
-run 100ps
+endmodule
