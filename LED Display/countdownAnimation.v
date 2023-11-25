@@ -28,9 +28,9 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 	reg enable;
 
 	//helpers
-	reg [23:0] cntStay; //625,0000 cycle / image
-	reg [3:0] cntlayer; // y: 8->1
-	reg [1:0] cntNum; // display 1 or 2 or 3
+	reg [24:0] cntStay; //625,0000 cycle / image
+	reg [4:0] cntlayer; // y: 8->1
+	reg [2:0] cntNum; // display 1 or 2 or 3
 	
 	
 	always@(posedge clk) begin
@@ -42,7 +42,7 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 			color <= 0;
 			enable <= 0;
 			cntStay <= 0;
-			cntlayer <= 4'd8;
+			cntlayer <= 5'd8;
 			cntNum <=0;
 			enable <= 0;
 		end
