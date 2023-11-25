@@ -49,10 +49,12 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 		
 		else if(CDA && ~CDADone)begin
 			
-			if(cntStay==23'd6250000) begin
+			if(cntStay==25'd6250000) begin
 				cntlayer <= cntlayer - 1;
-				cntStay <= 23'd0;
+				cntStay <= 0;
 			end
+			if(cntStay < 25'd6250000)
+				cntStay <= cntStay + 1;
 			
 			if(cntlayer==4'd0) begin
 				cntlayer <= 4'd8;
@@ -66,7 +68,7 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 			
 			else if(~CDADone) begin
 				
-				cntStay <= cntStay + 1;
+				
 				enable <= 1;
 				
 				// i=(cntStay%15)/3; t=3*cntNum + (cntStay%15)%3
