@@ -21,6 +21,17 @@ force {sensor} 0 0ps, 1 10ps
 force {pause} 0 0ps, 1 75ps, 0 90ps 
 force {CDADone} 0 0ps, 1 20ps
 force {clk} 1 0ps, 0 {2ps} -r 5ps
+force {rcm} 0
 #run simulation for a few 
 run 100ps
 
+//test for mode rcm=1 (rainbow color mode)
+force {resetn} 0 0ps, 1 10ps
+force {LOAD} 0 0ps, 1 30ps, 0 40ps, 1 50ps, 0 60ps
+force {sensor} 0 0ps, 1 10ps
+force {pause} 0 0ps, 1 75ps, 0 90ps 
+force {CDADone} 0 0ps, 1 20ps
+force {clk} 1 0ps, 0 {2ps} -r 5ps
+force {rcm} 1
+#run simulation for a few 
+run 100ps
