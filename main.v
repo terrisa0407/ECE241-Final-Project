@@ -43,8 +43,7 @@ module fill
 	fsm ff(CLOCK_50,KEY[1]/*LOAD*/,resetn, sensor,KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
 	Ped, CDA, POS, Color, off, SA);
 	
-	LEDdp led();
-	
+	LEDdp led(KEY[1]/*LOAD*/, resetn,CLOCK_50,SW[8:0],off,CDA,Pos,Color,SA,pause,CDADone,rcm);	
 	//
 	
 	wire writeEn;
@@ -52,6 +51,7 @@ module fill
 	// Create an Instance of a VGA controller - there can be only one!
 	// Define the number of colours as well as the initial background
 	// image file (.MIF) for the controller.
+	/*
 	vga_adapter VGA(
 			.resetn(resetn),
 			.clock(CLOCK_50),
@@ -59,7 +59,7 @@ module fill
 			.x(x),
 			.y(y),
 			.plot(writeEn),
-			/* Signals for the DAC to drive the monitor. */
+			/* Signals for the DAC to drive the monitor. //s
 			.VGA_R(VGA_R),
 			.VGA_G(VGA_G),
 			.VGA_B(VGA_B),
@@ -71,7 +71,7 @@ module fill
 		defparam VGA.RESOLUTION = "160x120";
 		defparam VGA.MONOCHROME = "FALSE";
 		defparam VGA.BITS_PER_COLOUR_CHANNEL = 1;
-		defparam VGA.BACKGROUND_IMAGE = "black.mif";
+		defparam VGA.BACKGROUND_IMAGE = "black.mif";*/
 			
 	// Put your code here. Your code should produce signals x,y,colour and writeEn
 	
