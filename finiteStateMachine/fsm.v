@@ -7,8 +7,8 @@ module fsm(
 	input pause, 
 	
 	input CDADone, // Countdown animation done
+	input rcm, // rainbow Color mode: 1(true)
 	
-	output reg rcm, // rainbow Color mode: 1(true)
 	output reg Ped, // paused 
 	
 	output reg CDA, //Countdown Animation
@@ -59,7 +59,6 @@ module fsm(
 		Color = 0;
 		SA = 0;
 		Ped = 0;
-		rcm = 0;
 		
 		case(cs)
 			5'd0: off = 1;
@@ -93,7 +92,6 @@ module fsm(
 				
 			5'd9: begin
 				SA = 1;
-				rcm = 1;
 			end
 			
 			5'd10: Ped = 1;
