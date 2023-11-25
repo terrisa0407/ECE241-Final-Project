@@ -74,7 +74,7 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 				if(figure[(cntStay%15)/3][3*cntNum + (cntStay%15)%3]) begin
 					oZ <= 6 - ((cntStay%15)/3);
 					oX <= 2 + ((cntStay%15)%3);
-					oY <= cntlayer;
+					oY <= cntlayer - 1;
 				
 				end
 				
