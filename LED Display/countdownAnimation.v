@@ -86,6 +86,6 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 		end
 	end
 	
-	//LEDdisplay led(clk,resetn,enable,oX,oY,oZ,color);
+	LEDdisplay led(clk,resetn,enable,oX,oY,oZ,color);
 
 endmodule
