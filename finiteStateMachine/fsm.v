@@ -4,7 +4,7 @@ module fsm(
 	input LOAD,
 	input resetn, 
 	input sensor,
-	input pasue, 
+	input pause, 
 	
 	input CDADone, // Countdown animation done
 	
@@ -39,12 +39,12 @@ module fsm(
 			end
 			
 			5'd5: ns = LOAD ? 5'd5 : 5'd6;
-			5'd6: ns = Ped ? 5'd7 : 5'd6; // notes: pressed -> true
-			5'd7: ns = Ped ? 5'd7 : 5'd6;
+			5'd6: ns = pause ? 5'd7 : 5'd6; // notes: pressed -> true
+			5'd7: ns = pause ? 5'd7 : 5'd6;
 			
 			5'd8: ns = LOAD ? 5'd8 : 5'd9;
-			5'd9: ns = Ped ? 5'd10 : 5'd9; 
-			5'd10: ns = Ped ? 5'd10 : 5'd9;
+			5'd9: ns = pause ? 5'd10 : 5'd9; 
+			5'd10: ns = pause ? 5'd10 : 5'd9;
 			default: ns = 5'd0;
 				
 		endcase
