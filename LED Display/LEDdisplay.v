@@ -1,4 +1,4 @@
-module LEDdisplay(input clk, input resetn,input enable,
+module LEDdisplay(input clk, input resetn,input enable, 
 	input [3:0] oX,input [3:0] oY,input [3:0] oZ,input [3:0] color,
 	output reg [35:0] jp1, output reg  [35:0] jp2
 	);
