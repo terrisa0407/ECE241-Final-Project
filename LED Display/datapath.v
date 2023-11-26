@@ -19,10 +19,16 @@ module LEDdp(
 	output reg rcm,
 	
 	output reg [35:0] jp1,
-	output reg [35:0] jp2
+	output reg [35:0] jp2,
+	
+	output reg [2:0] x,
+	output reg [2:0] y,
+	output reg [2:0] z,
+	output reg [2:0] color
+	
 );
 
-	reg [2:0] x,y,z,color;
+	//reg [2:0] x,y,z,color;
 	
 	wire [35:0] cdaAni1, cdaAni2, sel1,sel2;
 	
@@ -37,10 +43,11 @@ module LEDdp(
 			color <= 0;
 		end
 		
-		if(Pos) begin
+		else if(Pos) begin
 			x <= data[2:0];
 			y <= data[5:3];
 			z <= data[8:6];
+			color <= 3'b111;
 		end
 		
 		else if(choC) begin
