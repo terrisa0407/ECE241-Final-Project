@@ -18,12 +18,15 @@ module LEDdp(
 	output CDADone,
 	output reg rcm,
 	
-	output [35:0] jp1,
-	output [35:0] jp2
+	output reg [35:0] jp1,
+	output reg [35:0] jp2
 );
 
 	reg [2:0] x,y,z,color;
-	Countdown cda(clk,resetn,CDA,CDADone,jp1,jp2);
+	
+	wire [35:0] cdaAni1, cdaAni2, sel1,sel2;
+	
+	Countdown cda(clk,resetn,CDA,CDADone,cdaAni1,cdaAni2);
 	
 	//load x,y,z,color
 	always@(posedge clk) begin
@@ -49,7 +52,24 @@ module LEDdp(
 		
 	end
 	
-	selecting u1(clk,resetn,Pos,choC,x,y,z,color,jp1,jp2);
+	selecting u1(clk,resetn,Pos,choC,x,y,z,color,sel1,sel2);
+	
+	always@(*) begin
+		if(!resetn) begin
+			jp1 = 0;
+			jp2 = {36{1'b1}};
+		end
+		
+		else if(CDA) begin
+			jp1 = cdaAni1;
+			jp2 = cdaAni2;
+		end
+			
+		else if(Pos || choC) begin
+			jp1 = sel1;
+			jp2 = sel2;
+		end
+	end
 	
 	
 	
