@@ -35,8 +35,8 @@ module fill
 	assign resetn = KEY[0];
 	
 	// Changes go here
-	input [35:0] GPIO_0;
-	input [35:0] GPIO_1;
+	output [35:0] GPIO_0;
+	output [35:0] GPIO_1;
 	
 	wire sensor;
 	assign sensor = 1; // replaced with sensor module
