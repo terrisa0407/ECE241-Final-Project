@@ -2,8 +2,8 @@ module fill
 	(
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
-		KEY,	SW,	// On Board Keys
-		GPIO_0, GPIO_1,
+		KEY,	SW,	LEDR,// On Board Keys
+		GPIO_0, GPIO_1, HEX0, HEX1, HEX2, HEX4,
 		// The ports below are for the VGA output.  Do not change.
 		VGA_CLK,   						//	VGA Clock
 		VGA_HS,							//	VGA H_SYNC
@@ -35,8 +35,14 @@ module fill
 	assign resetn = KEY[0];
 	
 	// Changes go here
+	output reg [9:0] LEDR;
 	output [35:0] GPIO_0;
 	output [35:0] GPIO_1;
+	
+	output [6:0] HEX0;
+	output [6:0] HEX1;
+	output [6:0] HEX2;
+	output [6:0] HEX4;
 	
 	wire sensor;
 	assign sensor = 1; // replaced with sensor module
@@ -44,10 +50,28 @@ module fill
 	wire CDADone,rcm; // input
 	wire Ped, CDA,POS,Color,off,SA; //output
 	
-	fsm ff(CLOCK_50,KEY[1]/*LOAD*/,resetn, sensor,KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
-	Ped, CDA, POS, Color, off, SA);
+	wire [4:0] cs;
 	
-	LEDdp led(KEY[1]/*LOAD*/, resetn,CLOCK_50,SW[8:0],off,CDA,Pos,Color,SA,pause,CDADone,rcm,GPIO_0,GPIO_1);	
+	fsm ff(CLOCK_50,~KEY[1]/*LOAD*/,resetn, sensor,KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
+	Ped, CDA, POS, Color, off, SA,cs);
+	
+	//showing which state it is
+	integer i;
+	always@(*) begin
+		for(i=0;i<9;i=i+1) begin
+			if(i==cs) LEDR[i] = 1;
+			else LEDR[i] = 0;
+		end
+	end
+	wire [2:0] a,b,c,d;
+	LEDdp led(KEY[1]/*LOAD*/, resetn,CLOCK_50,SW[8:0],off,CDA,POS,Color,SA,pause,CDADone,rcm,GPIO_0,GPIO_1,a,b,c,d);	
+	
+	hex_decoder(a,HEX0);
+	hex_decoder(b,HEX1);
+	hex_decoder(c,HEX2);
+	
+	hex_decoder(d,HEX4);
+	
 	//
 	
 	wire writeEn;
@@ -84,3 +108,57 @@ module fill
 	
 	
 endmodule
+
+//changed version (0-7)
+module hex_decoder(ca,display);
+
+	input[2:0] ca;
+	output[6:0] display;
+	
+	wire [3:0] c;
+	assign c = {1'b0,ca};
+	
+	assign display[0] = ~((c[3] | c[2] | c[1] | ~c[0]) &
+		(c[3] | ~ c[2] | c[1] | c[0]) &
+		(~c[3] | c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | ~c[2] | c[1] | ~c[0]));
+		
+	assign display[1] = ~((c[3] | ~c[2] | c[1] | ~c[0]) &
+		(c[3] | ~c[2] | ~c[1] | c[0]) &
+		(~c[3] | c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | ~c[2] | c[1] | c[0]) &
+		(~c[3] | ~c[2] | ~c[1] | c[0]) &
+		(~c[3] | ~c[2] | ~c[1] | ~c[0]));
+		
+	assign display[2] = ~((c[3] | c[2] | ~c[1] | c[0]) &
+		(~c[3] | ~c[2] | c[1] | c[0]) &
+		(~c[3] | ~c[2] | ~c[1] | c[0]) &
+		(~c[3] | ~c[2] | ~c[1] | ~c[0]));
+		
+	assign display[3] = ~((c[3] | c[2] | c[1] | ~c[0]) &
+		(c[3] | ~c[2] | c[1] | c[0]) &
+		(c[3] | ~c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | c[2] | ~c[1] | c[0]) &
+		(~c[3] | ~c[2] | ~c[1] | ~c[0]));
+		
+	assign display[4] = ~((c[3] | c[2] | c[1] | ~c[0]) &
+		(c[3] | c[2] | ~c[1] | ~c[0]) &
+		(c[3] | ~c[2] | c[1] | c[0]) &
+		(c[3] | ~c[2] | c[1] | ~c[0]) &
+		(c[3] | ~c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | c[2] | c[1] | ~c[0]));
+		
+	assign display[5] = ~((c[3] | c[2] | c[1] | ~c[0]) &
+		(c[3] | c[2] | ~c[1] | c[0]) &
+		(c[3] | c[2] | ~c[1] | ~c[0]) &
+		(c[3] | ~c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | ~c[2] | c[1] | ~c[0]));
+		
+	assign display[6] = ~((c[3] | c[2] | c[1] | c[0]) &
+		(c[3] | c[2] | c[1] | ~c[0]) &
+		(c[3] | ~c[2] | ~c[1] | ~c[0]) &
+		(~c[3] | ~c[2] | c[1] | c[0]));
+		
+
+endmodule
+
