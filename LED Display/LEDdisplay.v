@@ -11,32 +11,43 @@ module LEDdisplay(input clk, input resetn,input enable,
 	
 	reg [7:0] x,y,z1,z2,z3;
 	
+	integer i;
 	
-	always @(posedge clk){
-		if(!resetn) begin
-			x <= 0;
-			y <= 0;
-			z1 <= 0;
-			z2 <= 0;
-			z3 <= 0;
+	always @(posedge clk) begin
+		if(~resetn) begin
+			x <= 8'd0;
+			y <= 8'd0;
+			z1 <= 8'd0;
+			z2 <= 8'd0;
+			z3 <= 8'd0;
 			jp1 <= 0;
 			jp2 <= 0;
 			
 		end
 		
 		else if(enable) begin
-			//oX[2:0]
-			x <= 0 + {1,{oX[2:0]{1'b0}}};
-			y <= 0 + {1,{oY[2:0]{1'b0}}};
 			
-			if(color[2] == 1)
-				z1 <= 0 + {1,{oZ[2:0]{1'b0}}};
+			for(i=0;i<8;i=i+1) begin
+				if(i == oX[2:0]) x[i] <= 1;
+				else x[i] <= 0;
 				
-			if(color[1] == 1)
-				z2 <= 0 + {1,{oZ[2:0]{1'b0}}};
-			
-			if(color[0] == 1)
-				z3 <= 0 + {1,{oZ[2:0]{1'b0}}};
+				if(i == oY[2:0]) y[i] <= 1;
+				else y[i] <= 0;
+				
+				if(i == oZ[2:0]) begin
+				
+					if(color[2] == 1) z1[i] <= 1;
+					else z1[i] <= 0;
+					
+					if(color[1] == 1) z2[i] <= 1;
+					else z2[i] <= 0;
+					
+					if(color[0] == 1) z3[i] <= 1;
+					else z3[i] <= 0;
+					
+				end
+				
+			end
 			
 			//on jp1
 			jp1[2] <= x[0];
@@ -88,7 +99,8 @@ module LEDdisplay(input clk, input resetn,input enable,
 			
 		
 		end
-	}
+		
+	end
 	
 	
 
