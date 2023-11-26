@@ -42,12 +42,15 @@ module LEDdp(
 		
 		else if(choC) begin
 			color <= data[2:0];
-			if(color == 111) rcm <= 1;
+			if(color == 0) rcm <= 1;
 			else rcm <= 0;
 			
 		end
 		
 	end
+	
+	selecting u1(clk,resetn,Pos,choC,x,y,z,color,jp1,jp2);
+	
 	
 	
 endmodule
