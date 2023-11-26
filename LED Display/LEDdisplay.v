@@ -20,8 +20,8 @@ module LEDdisplay(input clk, input resetn,input enable,
 			z1 <= 8'd0;
 			z2 <= 8'd0;
 			z3 <= 8'd0;
+			jp2 <= {35{1'b1}};
 			jp1 <= 0;
-			jp2 <= 0;
 			
 		end
 		
@@ -36,14 +36,14 @@ module LEDdisplay(input clk, input resetn,input enable,
 				
 				if(i == oZ[2:0]) begin
 				
-					if(color[2] == 1) z1[i] <= 1;
-					else z1[i] <= 0;
+					if(color[2] == 1) z1[i] <= 0;
+					else z1[i] <= 1;
 					
-					if(color[1] == 1) z2[i] <= 1;
-					else z2[i] <= 0;
+					if(color[1] == 1) z2[i] <= 0;
+					else z2[i] <= 1;
 					
-					if(color[0] == 1) z3[i] <= 1;
-					else z3[i] <= 0;
+					if(color[0] == 1) z3[i] <= 0;
+					else z3[i] <= 1;
 					
 				end
 				
@@ -66,7 +66,6 @@ module LEDdisplay(input clk, input resetn,input enable,
 			jp1[16] <= y[4];
 			jp1[18] <= y[5];
 			jp1[20] <= y[6];
-			jp1[22] <= y[7];
 			
 			
 			//jp2
@@ -99,6 +98,12 @@ module LEDdisplay(input clk, input resetn,input enable,
 			
 		
 		end
+		
+		else begin
+			jp2 <= {35{1'b1}};
+			jp1 <= 0;
+		end
+			
 		
 	end
 	
