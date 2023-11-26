@@ -3,6 +3,7 @@ module fill
 		CLOCK_50,						//	On Board 50 MHz
 		// Your inputs and outputs here
 		KEY,	SW,	// On Board Keys
+		GPIO_0, GPIO_1,
 		// The ports below are for the VGA output.  Do not change.
 		VGA_CLK,   						//	VGA Clock
 		VGA_HS,							//	VGA H_SYNC
@@ -34,6 +35,9 @@ module fill
 	assign resetn = KEY[0];
 	
 	// Changes go here
+	input [35:0] GPIO_0;
+	input [35:0] GPIO_1;
+	
 	wire sensor;
 	assign sensor = 1; // replaced with sensor module
 	
@@ -43,7 +47,7 @@ module fill
 	fsm ff(CLOCK_50,KEY[1]/*LOAD*/,resetn, sensor,KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
 	Ped, CDA, POS, Color, off, SA);
 	
-	LEDdp led(KEY[1]/*LOAD*/, resetn,CLOCK_50,SW[8:0],off,CDA,Pos,Color,SA,pause,CDADone,rcm);	
+	LEDdp led(KEY[1]/*LOAD*/, resetn,CLOCK_50,SW[8:0],off,CDA,Pos,Color,SA,pause,CDADone,rcm,GPIO_0,GPIO_1);	
 	//
 	
 	wire writeEn;
