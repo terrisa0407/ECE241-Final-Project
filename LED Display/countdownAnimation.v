@@ -1,4 +1,6 @@
-module Countdown(input clk,input resetn,input CDA,output reg CDADone);
+module Countdown(input clk,input resetn,input CDA,output reg CDADone,
+	output [35:0] jp1,
+	output [35:0] jp2);
 
 	reg figure [0:4][0:8];
 	//Assign value to figure 1-3
@@ -86,6 +88,6 @@ module Countdown(input clk,input resetn,input CDA,output reg CDADone);
 		end
 	end
 	
-	LEDdisplay led(clk,resetn,enable,oX,oY,oZ,color,x,y,z,c);
+	LEDdisplay led(clk,resetn,enable,oX,oY,oZ,color,jp1,jp2);
 
 endmodule
