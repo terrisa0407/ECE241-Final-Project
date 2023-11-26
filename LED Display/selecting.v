@@ -1,6 +1,6 @@
 module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, input [2:0] y, 
 	input [2:0] z, input [2:0] c,
-	output reg [35:0] jp1, output reg[35:0] jp2);
+	output [35:0] jp1, output [35:0] jp2);
 	
 	reg [3:0] oX,oY,oZ,color;
 	reg enable;
@@ -13,8 +13,6 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 	always@(posedge clk) begin
 	
 		if(!resetn) begin
-			jp1 <= 0;
-			jp2 <= {36{1'b1}};
 			enable <= 0;
 			oX <= 0;
 			oY <= 0;
@@ -72,4 +70,3 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 
 	
 endmodule
-	
