@@ -16,11 +16,14 @@ module LEDdp(
 	input pause,
 	
 	output CDADone,
-	output reg rcm
+	output reg rcm,
+	
+	output [35:0] jp1,
+	output [35:0] jp2
 );
 
 	reg [2:0] x,y,z,color;
-	Countdown cda(clk,resetn,CDA,CDADone);
+	Countdown cda(clk,resetn,CDA,CDADone,jp1,jp2);
 	
 	//load x,y,z,color
 	always@(posedge clk) begin
