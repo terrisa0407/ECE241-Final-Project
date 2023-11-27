@@ -58,7 +58,7 @@ module fill
 	//showing which state it is
 	integer i;
 	always@(*) begin
-		for(i=0;i<9;i=i+1) begin
+		for(i=0;i<10;i=i+1) begin
 			if(i==cs) LEDR[i] = 1;
 			else LEDR[i] = 0;
 		end
@@ -161,4 +161,6 @@ module hex_decoder(ca,display);
 		
 
 endmodule
+
+
 
