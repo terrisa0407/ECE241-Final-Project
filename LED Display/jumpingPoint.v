@@ -105,6 +105,7 @@ module jumpingPoint(input clk,input resetn,input pause,input rcm,input [2:0] x,i
 					if(color == 4'b0010) color <= 4'b0001;
 					if(color == 4'b0001) color <= 4'b0100;
 				end
+				else color <= {1'b0,c};
 				
 			end
 			
