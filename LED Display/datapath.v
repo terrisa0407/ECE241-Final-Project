@@ -59,7 +59,11 @@ module LEDdp(
 		
 	end
 	
+	wire [35:0] ani1,ani2;
+	
 	selecting u1(clk,resetn,Pos,choC,x,y,z,color,sel1,sel2);
+	jumpingPoint u2(clk,resetn,pause,rcm,x,y,z,color,ani1,ani2);
+	
 	
 	always@(*) begin
 		if(!resetn) begin
@@ -75,6 +79,11 @@ module LEDdp(
 		else if(Pos || choC) begin
 			jp1 = sel1;
 			jp2 = sel2;
+		end
+		
+		else if(AnS) begin
+			jp1 = ani1;
+			jp2 = ani2;
 		end
 	end
 	
