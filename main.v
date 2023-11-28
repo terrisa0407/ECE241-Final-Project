@@ -52,7 +52,7 @@ module fill
 	
 	wire [4:0] cs;
 	
-	fsm ff(CLOCK_50,~KEY[1]/*LOAD*/,resetn, sensor,KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
+	fsm ff(CLOCK_50,~KEY[1]/*LOAD*/,resetn, sensor,~KEY[2]/*pause*/, CDADone,rcm, // rainbow Color mode: 1(true)
 	Ped, CDA, POS, Color, off, SA,cs);
 	
 	//showing which state it is
@@ -161,6 +161,4 @@ module hex_decoder(ca,display);
 		
 
 endmodule
-
-
 
