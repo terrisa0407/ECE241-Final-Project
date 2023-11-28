@@ -8,6 +8,8 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 	reg [2:0] flash;
 	reg [25:0] counter;
 	
+	parameter freq = 4;
+	
 	integer i;
 	
 	always@(posedge clk) begin
@@ -39,7 +41,7 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 			
 				if(counter == 26'd25000000) begin
 					counter <= 0;
-					if(flash == 3'd4) 
+					if(flash == 3'd2) 
 						flash <= 0;
 					else
 						flash <= flash + 1;
@@ -60,13 +62,37 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 				
 				color <= {1'b0,c};
 				enable <= 1;
+				
 			end
 			
 		end
 		
 	end
 	
-	LEDdisplay led(clk,resetn,enable,oX,oY,oZ,color,jp1,jp2);
+	
+	reg [25:0] blinking;
+	reg en;
+	
+	always@(posedge clk) begin
+	
+		if(!resetn || !enable) begin
+			blinking <= 0;
+			en <= 0;
+		end
+		
+		else if(enable) begin
+			if(blinking == 50000000/freq) begin
+				blinking <= 0;
+				if(en) en <= 0;
+				else en <= 1;
+			end
+			else blinking <= blinking +1; 
+		end
+	
+	end
+	
+	LEDdisplay led(clk,resetn,en,oX,oY,oZ,color,jp1,jp2);
 
 	
 endmodule
+	
