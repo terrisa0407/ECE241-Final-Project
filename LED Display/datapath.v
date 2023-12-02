@@ -52,7 +52,7 @@ module LEDdp(
 		
 		else if(choC) begin
 			color <= data[2:0];
-			if(color == 0) rcm <= 1;
+			if(data[2:0] == 0) rcm <= 1;
 			else rcm <= 0;
 			
 		end
