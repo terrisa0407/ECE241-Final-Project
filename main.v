@@ -70,7 +70,8 @@ module fill
 	hex_decoder(b,HEX1);
 	hex_decoder(c,HEX2);
 	
-	hex_decoder(d,HEX4);
+	wire [2:0] ttt = {2'b00,rcm}; 
+	hex_decoder(Color,HEX4);
 	
 	//
 	
