@@ -75,12 +75,19 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 	
 	always@(posedge clk) begin
 	
-		if(!resetn || !enable) begin
+		if(!resetn) begin
 			blinking <= 0;
 			en <= 0;
 		end
 		
-		else if(enable) begin
+		else if(!Pos) en <= enable;
+		
+		else if(!enable)  begin
+			blinking <= 0;
+			en <= 1;
+		end
+		
+		else if(enable && c!=0) begin
 			if(blinking == 50000000/freq) begin
 				blinking <= 0;
 				if(en) en <= 0;
@@ -91,6 +98,7 @@ module selecting(input clk, input resetn, input Pos, input cCol, input [2:0] x, 
 	
 	end
 	
+	//Change this back / en / enable
 	LEDdisplay led(clk,resetn,en,oX,oY,oZ,color,jp1,jp2);
 
 	
